@@ -1,2 +1,53 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation boy</p>
+<script lang="ts">
+	import DrawArea from '$lib/components/DrawArea.svelte';
+	import ToolBar from '$lib/components/Toolbar.svelte';
+	const onClickHandler = (event: MouseEvent) => {
+		console.log('on click', event);
+	};
+</script>
+
+<main class="container" on:click={onClickHandler}>
+	<ToolBar />
+	<DrawArea />
+</main>
+
+<style>
+	/**
+     * ライトモードの際に適用されるスタイル変数設定
+    */
+	:global(body) {
+		--main-bg-color: #efebe9;
+		--main-text-color: #212121;
+
+		--sub-bg-color: #d7ccc8;
+		--sub-text-color: #212121;
+	}
+
+	/**
+     * ダークモードの際に適用されるスタイル変数設定
+    */
+	:global(body.dark) {
+		--main-bg-color: #424242;
+		--main-text-color: #f5f5f5;
+
+		--sub-bg-color: #202020;
+		--sub-text-color: #f5f5f5;
+
+		--popup-bg-color: #1f1f1f;
+		--popup-border-color: #111111;
+	}
+
+	:global(html) {
+		height: 100%;
+		font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif,
+			Apple Color Emoji, Segoe UI Emoji;
+	}
+	:global(body) {
+		height: 100%;
+	}
+
+	.container {
+		padding: 0;
+		height: 100%;
+	}
+</style>

@@ -7,6 +7,7 @@
 	} from '@fortawesome/free-solid-svg-icons';
 	import { onMount } from 'svelte';
 	import Fa from 'svelte-fa';
+	import { _ } from 'svelte-i18n';
 	import { storedClickEvent } from '../store/click-store';
 
 	let selectTypeOptionsVisible: boolean;
@@ -66,7 +67,7 @@
 			role="presentation"
 		>
 			<Fa icon={faVectorSquare} size="sm" />
-			<span class="selected-type-name">範囲選択</span>
+			<span class="selected-type-name">{$_('toolBar.selectType.range')}</span>
 			<span class="select-appearance">
 				<Fa icon={faChevronRight} size="xs" rotate={90} />
 			</span>

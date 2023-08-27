@@ -1,0 +1,16 @@
+{
+    "svelte.enable-ts-plugin": true,
+    "cSpell.words": [
+      "tauri",
+      "Typecheck"
+    ],
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true,
+      "source.organizeImports": true,
+      "source.sortMembers": true
+    },
+    "[typescript]": {
+        "editor.formatOnSave": true
+    }
+  }

@@ -1,12 +1,14 @@
 <script lang="ts">
 	import DrawArea from '$lib/components/DrawArea.svelte';
 	import ToolBar from '$lib/components/Toolbar.svelte';
+	import { storedClickEvent } from '$lib/store/click-store';
 	const onClickHandler = (event: MouseEvent) => {
 		console.log('on click', event);
+		storedClickEvent.set(event);
 	};
 </script>
 
-<main class="container" on:click={onClickHandler}>
+<main class="container" on:click={onClickHandler} role="presentation">
 	<ToolBar />
 	<DrawArea />
 </main>

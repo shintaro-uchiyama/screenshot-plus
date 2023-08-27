@@ -43,7 +43,12 @@
 			<span class="new-text"> New </span>
 		</div>
 		<div class="divider" />
-		<div class="select-type" bind:this={selectTypeRef} on:click={onClickSelectType}>
+		<div
+			class="select-type"
+			bind:this={selectTypeRef}
+			on:click={onClickSelectType}
+			role="presentation"
+		>
 			<div class="drag-range" />
 			<span class="select-appearance">
 				<Fa icon={faChevronRight} size="xs" rotate={90} />

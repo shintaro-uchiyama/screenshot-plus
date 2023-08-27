@@ -1,13 +1,24 @@
 <script lang="ts">
-	import { faChevronRight, faPlus } from '@fortawesome/free-solid-svg-icons';
+	import {
+		faChevronRight,
+		faPlus,
+		faVectorSquare,
+		faWindowRestore
+	} from '@fortawesome/free-solid-svg-icons';
 	import { onMount } from 'svelte';
 	import Fa from 'svelte-fa';
 	import { storedClickEvent } from '../store/click-store';
 
-	let showSelectTypeOptions: boolean;
+	let selectTypeOptionsVisible: boolean;
 	let popupLeft: number = 12;
 	let selectTypeRef: HTMLElement;
 	let lastMouseEvent: MouseEvent;
+
+	enum SelectedTypeEnum {
+		Range = 'Range',
+		Window = 'Window'
+	}
+	let selectedType: SelectedTypeEnum = SelectedTypeEnum.Range;
 
 	onMount(() => {
 		const unsubscribe = storedClickEvent.subscribe((clickEvent) => {
@@ -18,21 +29,26 @@
 					lastMouseEvent.x === clickEvent.x &&
 					lastMouseEvent.y === clickEvent.y
 				) &&
-				showSelectTypeOptions
+				selectTypeOptionsVisible
 			) {
-				showSelectTypeOptions = false;
+				selectTypeOptionsVisible = false;
 			}
 		});
 		return unsubscribe;
 	});
 
-	const onClickSelectType = (event: MouseEvent) => {
+	const showSelectTypeOptions = (event: MouseEvent) => {
+		console.log('e', event);
 		lastMouseEvent = event;
-		showSelectTypeOptions = true;
+		selectTypeOptionsVisible = true;
 		const rect = selectTypeRef.getBoundingClientRect();
 		const left = rect.left;
 		popupLeft = left;
 		const bottom = rect.bottom;
+	};
+
+	const onClickSelectTypeOption = (_: MouseEvent, selectedSelectType: SelectedTypeEnum) => {
+		selectedType = selectedSelectType;
 	};
 </script>
 
@@ -46,17 +62,34 @@
 		<div
 			class="select-type"
 			bind:this={selectTypeRef}
-			on:click={onClickSelectType}
+			on:click={showSelectTypeOptions}
 			role="presentation"
 		>
-			<div class="drag-range" />
+			<Fa icon={faVectorSquare} size="sm" />
+			<span>範囲選択</span>
 			<span class="select-appearance">
 				<Fa icon={faChevronRight} size="xs" rotate={90} />
 			</span>
 		</div>
 	</div>
-	{#if showSelectTypeOptions}
-		<div class="sample" style="left: {popupLeft}px">tttttttt</div>
+	{#if selectTypeOptionsVisible}
+		<ul class="select-type-popup" style="left: {popupLeft}px">
+			<li
+				class:is-selected={selectedType === SelectedTypeEnum.Range}
+				on:click={(event) => onClickSelectTypeOption(event, SelectedTypeEnum.Range)}
+				role="presentation"
+			>
+				<Fa icon={faVectorSquare} /><span class="select-type-text"> 範囲選択 </span>
+			</li>
+			<li
+				class:is-selected={selectedType === SelectedTypeEnum.Window}
+				on:click={(event) => onClickSelectTypeOption(event, SelectedTypeEnum.Window)}
+				role="presentation"
+			>
+				<Fa icon={faWindowRestore} />
+				<span class="select-type-text">ウィンドウ選択 </span>
+			</li>
+		</ul>
 	{/if}
 </div>
 
@@ -86,7 +119,7 @@
 		cursor: pointer;
 		width: 74px;
 		height: 36px;
-		background-color: #424242;
+		background-color: var(--sub-highlight-color);
 		border-radius: 4px;
 	}
 
@@ -103,7 +136,7 @@
 	}
 
 	.select-type {
-		width: 80px;
+		width: 120px;
 		height: 36px;
 		margin-left: 14px;
 		padding-right: 8px;
@@ -112,27 +145,28 @@
 		align-items: center;
 	}
 
-	.drag-range {
-		width: 22px;
-		height: 18px;
-		border: 1px dashed #fafafa;
-		border-radius: 2px;
-	}
-
 	.select-appearance {
 		margin-left: 12px;
 	}
 
-	.sample {
+	.select-type-popup {
 		position: absolute;
 		top: 50px;
 		/** leftは動的に設定 */
-		width: 80px;
-		height: 80px;
+		padding: 6px 10px;
+		cursor: pointer;
 		background-color: var(--popup-bg-color);
 		z-index: 100;
 		border: 1px solid var(--popup-border-color);
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 		border-radius: 4px;
+	}
+
+	.select-type-text {
+		margin-left: 6px;
+	}
+
+	.is-selected {
+		background-color: var(--sub-highlight-color);
 	}
 </style>

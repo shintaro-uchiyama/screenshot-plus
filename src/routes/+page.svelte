@@ -34,6 +34,7 @@
 
 		--sub-bg-color: #202020;
 		--sub-text-color: #f5f5f5;
+		--sub-highlight-color: #424242;
 
 		--popup-bg-color: #1f1f1f;
 		--popup-border-color: #111111;

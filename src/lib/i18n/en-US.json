@@ -1,5 +1,6 @@
 {
     "toolBar": {
+      "new": "New",
       "selectType": {
         "range": "Range",
         "window": "Window"

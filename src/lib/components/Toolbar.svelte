@@ -1,10 +1,5 @@
 <script lang="ts">
-	import {
-		faChevronRight,
-		faPlus,
-		faVectorSquare,
-		faWindowRestore
-	} from '@fortawesome/free-solid-svg-icons';
+	import { faChevronRight, faPlus, faVectorSquare } from '@fortawesome/free-solid-svg-icons';
 	import { onMount } from 'svelte';
 	import Fa from 'svelte-fa';
 	import { _ } from 'svelte-i18n';
@@ -19,7 +14,26 @@
 		Range = 'Range',
 		Window = 'Window'
 	}
+	const selectTypeOptions: {
+		selectType: SelectedTypeEnum;
+		label: string;
+	}[] = [
+		{
+			selectType: SelectedTypeEnum.Range,
+			label: $_('toolBar.selectType.range')
+		},
+		{
+			selectType: SelectedTypeEnum.Window,
+			label: $_('toolBar.selectType.window')
+		}
+	];
+
 	let selectedType: SelectedTypeEnum = SelectedTypeEnum.Range;
+	let hoveredType: SelectedTypeEnum = selectedType;
+
+	$: selectedSelectTypeLabel = selectTypeOptions.find(
+		(selectTypeOption) => selectTypeOption.selectType === selectedType
+	)?.label;
 
 	onMount(() => {
 		const unsubscribe = storedClickEvent.subscribe((clickEvent) => {
@@ -39,17 +53,20 @@
 	});
 
 	const showSelectTypeOptions = (event: MouseEvent) => {
-		console.log('e', event);
 		lastMouseEvent = event;
 		selectTypeOptionsVisible = true;
 		const rect = selectTypeRef.getBoundingClientRect();
 		const left = rect.left;
 		popupLeft = left;
-		const bottom = rect.bottom;
+		hoveredType = selectedType;
 	};
 
 	const onClickSelectTypeOption = (_: MouseEvent, selectedSelectType: SelectedTypeEnum) => {
 		selectedType = selectedSelectType;
+	};
+
+	const onMouseEnterOption = (hoveredSelectedType: SelectedTypeEnum) => {
+		hoveredType = hoveredSelectedType;
 	};
 </script>
 
@@ -57,7 +74,7 @@
 	<div class="container">
 		<div class="new">
 			<Fa icon={faPlus} size="sm" />
-			<span class="new-text"> New </span>
+			<span class="new-text"> {$_('toolBar.new')} </span>
 		</div>
 		<div class="divider" />
 		<div
@@ -67,7 +84,7 @@
 			role="presentation"
 		>
 			<Fa icon={faVectorSquare} size="sm" />
-			<span class="selected-type-name">{$_('toolBar.selectType.range')}</span>
+			<span class="selected-type-name">{selectedSelectTypeLabel}</span>
 			<span class="select-appearance">
 				<Fa icon={faChevronRight} size="xs" rotate={90} />
 			</span>
@@ -75,23 +92,17 @@
 	</div>
 	{#if selectTypeOptionsVisible}
 		<ul class="select-type-popup" style="left: {popupLeft}px">
-			<li
-				class="select-type-option"
-				class:is-selected={selectedType === SelectedTypeEnum.Range}
-				on:click={(event) => onClickSelectTypeOption(event, SelectedTypeEnum.Range)}
-				role="presentation"
-			>
-				<Fa icon={faVectorSquare} /><span class="select-type-text"> 範囲選択 </span>
-			</li>
-			<li
-				class="select-type-option"
-				class:is-selected={selectedType === SelectedTypeEnum.Window}
-				on:click={(event) => onClickSelectTypeOption(event, SelectedTypeEnum.Window)}
-				role="presentation"
-			>
-				<Fa icon={faWindowRestore} />
-				<span class="select-type-text">ウィンドウ選択 </span>
-			</li>
+			{#each selectTypeOptions as selectTypeOption}
+				<li
+					class="select-type-option"
+					class:is-selected={hoveredType === selectTypeOption.selectType}
+					on:click={(event) => onClickSelectTypeOption(event, selectTypeOption.selectType)}
+					on:mouseenter={(_) => onMouseEnterOption(selectTypeOption.selectType)}
+					role="presentation"
+				>
+					<Fa icon={faVectorSquare} /><span class="select-type-text">{selectTypeOption.label}</span>
+				</li>
+			{/each}
 		</ul>
 	{/if}
 </div>

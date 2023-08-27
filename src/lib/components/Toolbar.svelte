@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { faChevronRight, faPlus, faVectorSquare } from '@fortawesome/free-solid-svg-icons';
+	import {
+		faChevronRight,
+		faPlus,
+		faVectorSquare,
+		faWindowRestore,
+		type IconDefinition
+	} from '@fortawesome/free-solid-svg-icons';
 	import { onMount } from 'svelte';
 	import Fa from 'svelte-fa';
 	import { _ } from 'svelte-i18n';
@@ -16,14 +22,17 @@
 	}
 	const selectTypeOptions: {
 		selectType: SelectedTypeEnum;
+		icon: IconDefinition;
 		label: string;
 	}[] = [
 		{
 			selectType: SelectedTypeEnum.Range,
+			icon: faVectorSquare,
 			label: $_('toolBar.selectType.range')
 		},
 		{
 			selectType: SelectedTypeEnum.Window,
+			icon: faWindowRestore,
 			label: $_('toolBar.selectType.window')
 		}
 	];
@@ -31,9 +40,9 @@
 	let selectedType: SelectedTypeEnum = SelectedTypeEnum.Range;
 	let hoveredType: SelectedTypeEnum = selectedType;
 
-	$: selectedSelectTypeLabel = selectTypeOptions.find(
+	$: selectedSelectType = selectTypeOptions.find(
 		(selectTypeOption) => selectTypeOption.selectType === selectedType
-	)?.label;
+	);
 
 	onMount(() => {
 		const unsubscribe = storedClickEvent.subscribe((clickEvent) => {
@@ -83,8 +92,8 @@
 			on:click={showSelectTypeOptions}
 			role="presentation"
 		>
-			<Fa icon={faVectorSquare} size="sm" />
-			<span class="selected-type-name">{selectedSelectTypeLabel}</span>
+			<Fa icon={selectedSelectType?.icon} size="sm" />
+			<span class="selected-type-name">{selectedSelectType?.label}</span>
 			<span class="select-appearance">
 				<Fa icon={faChevronRight} size="xs" rotate={90} />
 			</span>
@@ -100,7 +109,9 @@
 					on:mouseenter={(_) => onMouseEnterOption(selectTypeOption.selectType)}
 					role="presentation"
 				>
-					<Fa icon={faVectorSquare} /><span class="select-type-text">{selectTypeOption.label}</span>
+					<Fa icon={selectTypeOption.icon} /><span class="select-type-text"
+						>{selectTypeOption.label}</span
+					>
 				</li>
 			{/each}
 		</ul>

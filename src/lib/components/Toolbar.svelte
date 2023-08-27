@@ -66,7 +66,7 @@
 			role="presentation"
 		>
 			<Fa icon={faVectorSquare} size="sm" />
-			<span>範囲選択</span>
+			<span class="selected-type-name">範囲選択</span>
 			<span class="select-appearance">
 				<Fa icon={faChevronRight} size="xs" rotate={90} />
 			</span>
@@ -75,6 +75,7 @@
 	{#if selectTypeOptionsVisible}
 		<ul class="select-type-popup" style="left: {popupLeft}px">
 			<li
+				class="select-type-option"
 				class:is-selected={selectedType === SelectedTypeEnum.Range}
 				on:click={(event) => onClickSelectTypeOption(event, SelectedTypeEnum.Range)}
 				role="presentation"
@@ -82,6 +83,7 @@
 				<Fa icon={faVectorSquare} /><span class="select-type-text"> 範囲選択 </span>
 			</li>
 			<li
+				class="select-type-option"
 				class:is-selected={selectedType === SelectedTypeEnum.Window}
 				on:click={(event) => onClickSelectTypeOption(event, SelectedTypeEnum.Window)}
 				role="presentation"
@@ -145,6 +147,10 @@
 		align-items: center;
 	}
 
+	.selected-type-name {
+		margin-left: 6px;
+	}
+
 	.select-appearance {
 		margin-left: 12px;
 	}
@@ -160,6 +166,11 @@
 		border: 1px solid var(--popup-border-color);
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 		border-radius: 4px;
+	}
+
+	.select-type-option {
+		cursor: pointer;
+		padding: 6px 10px;
 	}
 
 	.select-type-text {

@@ -1,5 +1,23 @@
+<script lang="ts">
+	import { storedOsType } from '$lib/store/os-type-store';
+	let key = '';
+	storedOsType.subscribe((osType) => {
+		switch (osType) {
+			case 'Darwin':
+				key = 'Command';
+
+				break;
+
+			case 'Windows_NT':
+				key = 'Ctrl';
+
+				break;
+		}
+	});
+</script>
+
 <div class="draw-area">
-	<span> Capture area </span>
+	<span> {key} + Shift + S to start snapshot</span>
 </div>
 
 <style>

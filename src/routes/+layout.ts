@@ -1,5 +1,6 @@
 import { browser } from '$app/environment';
 import '$lib/i18n'; // Import to initialize. Important :)
+import { storedOsType } from '$lib/store/os-type-store';
 import { locale, waitLocale } from 'svelte-i18n';
 import type { LayoutLoad } from './$types';
 
@@ -19,4 +20,9 @@ export const load: LayoutLoad = async () => {
 		locale.set(window.navigator.language)
 	}
 	await waitLocale()
+
+	// OS種別セット
+	const os = await import('@tauri-apps/api/os');
+	const osType = await os.type();
+	storedOsType.set(osType)
 }

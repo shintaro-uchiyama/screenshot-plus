@@ -14,6 +14,7 @@ fn main() {
                 }))
                 .unwrap();
             main_window.set_resizable(false).unwrap();
+
             Ok(())
         })
         .run(tauri::generate_context!())
